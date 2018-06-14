@@ -1,0 +1,51 @@
+# server config
+server:
+  port: 9094
+  context-path: /
+  session:
+    cookie:
+      name: UISESSION
+
+#eureka server
+eureka:
+  instance:
+    hostname: localhost
+    port: 9091
+  client:
+    registerWithEureka: true
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+  server:
+    wait-time-in-ms-when-sync-empty: 3000
+
+# auth
+authserver:
+  hostname: http://localhost:9092
+
+# security
+security:
+  oauth2:
+    client:
+      clientId: register-app
+      clientSecret: secret
+      accessTokenUri: ${authserver.hostname}/api/oauth/access_token
+      userAuthorizationUri: ${authserver.hostname}/api/oauth
+    resource:
+      userInfoUri: ${authserver.hostname}/api/user/me
+
+## Log settings
+logging:
+  level:
+    org.springframework.web: ALL
+    org.hibernate: ALL
+    com.rvfs.challenge: ALL
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file: logs/spring-boot-logging.log
+
+
+spring:
+  thymeleaf:
+    cache: false
